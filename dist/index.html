@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#160f1e" />
+  <meta name="description" content="ঢাকা ড্যাশ — ঢাকার রাস্তায় রিকশা চালানোর 3D গেম।" />
+  <title>ঢাকা ড্যাশ · Dhaka Dash</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ff5a36'/%3E%3Ccircle cx='18' cy='46' r='8' fill='%23ffe9c7'/%3E%3Ccircle cx='46' cy='46' r='8' fill='%23ffe9c7'/%3E%3Cpath d='M12 34h30l8-14h-12l-6 8H12z' fill='%231fbfa5'/%3E%3C/svg%3E" />
+  <script type="module" crossorigin src="./assets/index-CaPczPEO.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-lC2IZgE2.css">
+</head>
+<body>
+  <div id="app">
+    <div id="scene" aria-hidden="true"></div>
+    <div class="atmosphere" aria-hidden="true">
+      <div class="vignette"></div>
+      <div class="grain"></div>
+      <div class="speedlines"></div>
+      <div class="flash"></div>
+    </div>
+
+    <header id="hud" class="hud is-hidden">
+      <div class="hud-left">
+        <div class="stat stat-score">
+          <span class="stat-label">স্কোর <i>SCORE</i></span>
+          <strong id="score">0</strong>
+          <span id="combo" class="combo"></span>
+        </div>
+      </div>
+      <div class="hud-center">
+        <div class="distance-wrap">
+          <span class="distance-label">দূরত্ব <i>DISTANCE</i></span>
+          <span class="distance-value"><b id="distance">0</b> মি</span>
+        </div>
+        <div class="progress"><span id="progressBar"></span></div>
+      </div>
+      <div class="hud-right">
+        <div class="best-chip"><span>সেরা</span><b id="hudBest">0</b></div>
+        <button id="pauseBtn" class="icon-btn" type="button" aria-label="বিরতি">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.4" y="5" width="3.6" height="14" rx="1.2"/></svg>
+        </button>
+        <button id="muteBtn" class="icon-btn" type="button" aria-label="শব্দ বন্ধ">
+          <svg class="icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z"/><path d="M15.4 8.6a4.8 4.8 0 0 1 0 6.8M18 6a8.4 8.4 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+          <svg class="icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z"/><path d="m16 9 5 6m0-6-5 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div id="boostWrap" class="boost is-hidden">
+      <div class="boost-head">
+        <span>চা-পাওয়ার <i>TEA BOOST</i></span>
+        <b id="boostHint">DASH</b>
+      </div>
+      <div class="boost-track"><span id="boostFill"></span><em></em><em></em><em></em></div>
+    </div>
+
+    <div id="touchControls" class="touch-controls is-hidden" aria-hidden="true">
+      <div class="touch-left">
+        <button class="touch-btn" data-action="left" aria-label="বাঁয়ে">
+          <svg viewBox="0 0 24 24"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="touch-btn" data-action="right" aria-label="ডানে">
+          <svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="touch-right">
+        <button class="touch-btn touch-dash" data-action="dash" aria-label="বুস্ট">
+          <svg viewBox="0 0 24 24"><path d="M13 2 4.5 13.5H11L9.5 22 19 9.8h-6.6z"/></svg>
+        </button>
+        <button class="touch-btn touch-duck" data-action="duck" aria-label="ঝুঁকুন">
+          <svg viewBox="0 0 24 24"><path d="M12 5v13m0 0-6-6m6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="touch-btn touch-jump" data-action="jump" aria-label="লাফ">
+          <svg viewBox="0 0 24 24"><path d="M12 19V6m0 0-6 6m6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="toastLayer" class="toast-layer" aria-live="polite"></div>
+
+    <section id="startScreen" class="screen start-screen">
+      <div class="start-top">
+        <span class="eyebrow"><span class="dot"></span> OMG · ORIGINAL</span>
+        <span class="lang-chip">বাংলা / EN</span>
+      </div>
+      <div class="hero">
+        <p class="kicker">ঢাকার রাস্তা · সন্ধ্যার ভিড়</p>
+        <h1 class="title">
+          <span class="title-bn">ঢাকা ড্যাশ</span>
+          <span class="title-en">DHAKA&nbsp;DASH</span>
+        </h1>
+        <p class="tagline">রিকশা ছুটিয়ে ম্যাংগো তুলুন, বাস-গাড়ি এড়িয়ে যান।<br /><span>একটি 3D রিকশা রানার — ঢাকার নিজের রঙে।</span></p>
+      </div>
+      <div class="start-actions">
+        <button id="playBtn" class="btn btn-primary" type="button">
+          <span class="btn-main">খেলা শুরু</span>
+          <span class="btn-sub">PLAY · SPACE</span>
+        </button>
+        <button id="howBtn" class="btn btn-ghost" type="button">কীভাবে খেলবেন</button>
+      </div>
+      <div class="start-foot">
+        <div class="best-card">
+          <span>সেরা স্কোর</span>
+          <b id="startBest">0</b>
+        </div>
+        <div class="keys">
+          <span class="key"><kbd>←</kbd><kbd>→</kbd> সরান</span>
+          <span class="key"><kbd>↑</kbd> লাফ</span>
+          <span class="key"><kbd>Shift</kbd> বুস্ট</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="howScreen" class="screen how-screen is-hidden">
+      <div class="panel how-panel">
+        <button id="howClose" class="close-btn" type="button" aria-label="বন্ধ">×</button>
+        <p class="kicker">নিয়মকানুন</p>
+        <h2>কীভাবে খেলবেন</h2>
+        <div class="how-grid">
+          <div class="how-item">
+            <div class="how-icon">↔</div>
+            <h3>লেন বদলান</h3>
+            <p>বাঁয়ে-ডানে সরিয়ে রিকশাকে নিরাপদ লেনে নিন। <span>Arrow keys / A-D / swipe</span></p>
+          </div>
+          <div class="how-item">
+            <div class="how-icon">↑</div>
+            <h3>লাফ দিন</h3>
+            <p>গর্ত আর ব্যারিকেডের ওপর দিয়ে লাফান। <span>Up / W / Space</span></p>
+          </div>
+          <div class="how-item">
+            <div class="how-icon">↓</div>
+            <h3>নিচু হন</h3>
+            <p>ঝুলন্ত ব্যানার বা তারের নিচ দিয়ে যেতে ঝুঁকুন। <span>Down / S</span></p>
+          </div>
+          <div class="how-item">
+            <div class="how-icon">⚡</div>
+            <h3>চা-বুস্ট</h3>
+            <p>ম্যাংগো জমিয়ে বুস্ট ভরান, তারপর ধোঁয়া তুলুন। <span>Shift / DASH button</span></p>
+          </div>
+        </div>
+        <p class="how-note">টিপস: পরপর ম্যাংগো তুললে কম্বো বোনাস। বাসের খুব কাছে দিয়ে গেলে নিয়ার-মিস বোনাস।</p>
+      </div>
+    </section>
+
+    <section id="pauseScreen" class="screen pause-screen is-hidden">
+      <div class="panel pause-panel">
+        <p class="kicker">একটু দম নিন</p>
+        <h2>বিরতি</h2>
+        <div class="pause-stats">
+          <div><span>স্কোর</span><b id="pauseScore">0</b></div>
+          <div><span>দূরত্ব</span><b><i id="pauseDistance">0</i> মি</b></div>
+        </div>
+        <div class="panel-actions">
+          <button id="resumeBtn" class="btn btn-primary" type="button"><span class="btn-main">চালিয়ে যান</span><span class="btn-sub">RESUME</span></button>
+          <button id="pauseHomeBtn" class="btn btn-ghost" type="button">মূল পাতা</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="overScreen" class="screen over-screen is-hidden">
+      <div class="panel over-panel">
+        <p id="overKicker" class="kicker">ধরা পড়ে গেছেন!</p>
+        <h2 id="overTitle">দুর্ঘটনা</h2>
+        <div id="newBest" class="new-best is-hidden">নতুন রেকর্ড!</div>
+        <div class="result-grid">
+          <div class="result-main">
+            <span>স্কোর</span>
+            <b id="finalScore">0</b>
+          </div>
+          <div><span>দূরত্ব</span><b><i id="finalDistance">0</i> মি</b></div>
+          <div><span>ম্যাংগো</span><b id="finalMangoes">0</b></div>
+          <div><span>সেরা</span><b id="finalBest">0</b></div>
+        </div>
+        <div class="panel-actions">
+          <button id="retryBtn" class="btn btn-primary" type="button"><span class="btn-main">আবার খেলুন</span><span class="btn-sub">RETRY · SPACE</span></button>
+          <button id="homeBtn" class="btn btn-ghost" type="button">মূল পাতা</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="loader" class="loader">
+      <div class="loader-rickshaw">
+        <span class="lr-wheel lr-wheel-a"></span>
+        <span class="lr-wheel lr-wheel-b"></span>
+        <span class="lr-body"></span>
+      </div>
+      <p>ঢাকা জাগছে… <span>LOADING</span></p>
+    </div>
+  </div>
+
+</body>
+</html>

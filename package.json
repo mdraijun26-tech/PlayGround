@@ -1,0 +1,19 @@
+{
+  "name": "dhaka-dash",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ঢাকা ড্যাশ — a 3D rickshaw runner through Dhaka at dusk.",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 3002",
+    "build": "vite build --base ./",
+    "preview": "vite preview --host 0.0.0.0 --port 3002",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5"
+  }
+}
