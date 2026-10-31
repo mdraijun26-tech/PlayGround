@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#072b26" />
+  <title>নৌকাবাইচ ৩ডি — বাংলাদেশের নদী</title>
+  <meta name="description" content="বাংলাদেশের নদীতে ৩ডি নৌকাবাইচ — তিন প্রতিদ্বন্দ্বীকে হারিয়ে চ্যাম্পিয়ন হও।" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <canvas id="scene" aria-label="নৌকাবাইচ ৩ডি গেমের দৃশ্য"></canvas>
+
+  <div id="loading" class="screen loading">
+    <div class="rowing">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <p>নদী তৈরি হচ্ছে…</p>
+    <small>পদ্মার ঢেউ, নৌকা আর গ্রাম</small>
+  </div>
+
+  <div id="hud" class="hud hidden">
+    <div class="stat-row">
+      <div class="stat"><span>ল্যাপ</span><strong id="lap">১/২</strong></div>
+      <div class="stat"><span>স্থান</span><strong id="place">৪র্থ</strong></div>
+    </div>
+
+    <div class="timer-wrap">
+      <span>সময়</span>
+      <strong id="timer">০০:০০.০</strong>
+    </div>
+
+    <div class="hud-buttons">
+      <button id="muteBtn" class="icon-btn" aria-label="সাউন্ড বন্ধ করো">
+        <svg viewBox="0 0 24 24" class="icon-on"><path d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/><path d="M14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
+        <svg viewBox="0 0 24 24" class="icon-off"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      </button>
+      <button id="pauseBtn" class="icon-btn" aria-label="বিরতি">
+        <svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+      </button>
+    </div>
+
+    <canvas id="minimap" width="184" height="184" aria-label="রেসের ম্যাপ"></canvas>
+
+    <div class="boost">
+      <div class="boost-label"><span>বুস্ট</span><span id="boostPct">১০০%</span></div>
+      <div class="boost-bar"><div id="boostFill"></div></div>
+    </div>
+
+    <div class="speed">
+      <span>গতি</span>
+      <strong id="speed">০</strong>
+      <small>নট</small>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="countdown" class="countdown" aria-live="assertive"></div>
+
+    <div class="touch">
+      <div class="touch-steer">
+        <button class="touch-btn" id="leftBtn" aria-label="বাঁয়ে চালাও">
+          <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="touch-btn" id="rightBtn" aria-label="ডানে চালাও">
+          <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <button class="touch-boost" id="boostBtn" aria-label="বুস্ট">
+        <span class="touch-boost-ring"></span>
+        <span>বুস্ট</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="menu" class="screen menu">
+    <div class="menu-inner">
+      <div class="brand">
+        <span class="brand-word">নৌকা</span>
+        <span class="brand-3d">৩ডি</span>
+      </div>
+      <h1>নৌকাবাইচ</h1>
+      <div class="rule"><i></i><b>✶</b><i></i></div>
+      <p class="tagline">বাংলাদেশের নদীপথে রোমাঝি লড়াই</p>
+      <p class="desc">পদ্মার ঢেউ ভেঙে তিন প্রতিদ্বন্দ্বীকে হারিয়ে প্রথম হও। নদীর পদ্ম ফুল কুড়িয়ে বুস্ট বাড়াও, বাঁকের ভেতর দিয়ে নৌকা টেনে নাও।</p>
+
+      <button id="startBtn" class="primary">
+        <span>দৌড় শুরু করো</span>
+        <svg viewBox="0 0 24 24"><path d="M5 12h13m-5-6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="menu-meta">
+        <div class="best">
+          <span>সেরা সময়</span>
+          <strong id="bestTime">—</strong>
+        </div>
+        <div class="chips">
+          <span class="chip"><kbd>←</kbd><kbd>→</kbd> চালাও</span>
+          <span class="chip"><kbd>Space</kbd> বুস্ট</span>
+          <span class="chip"><kbd>↓</kbd> ব্রেক</span>
+          <span class="chip"><kbd>P</kbd> বিরতি</span>
+        </div>
+        <p class="touch-hint">মোবাইলে নিচের ◀ ▶ বোতামে নৌকা চালাও, “বুস্ট” চেপে ধরে থাকো।</p>
+      </div>
+
+      <p class="footnote">২ ল্যাপ • ৩ প্রতিদ্বন্দ্বী • অসংখ্য পদ্ম</p>
+    </div>
+    <div class="menu-fade"></div>
+  </div>
+
+  <div id="pause" class="screen hidden">
+    <div class="card">
+      <p class="eyebrow">বিরতি</p>
+      <h2>নৌকা থামিয়ে রেখেছি</h2>
+      <button id="resumeBtn" class="primary">চালিয়ে যাও</button>
+      <div class="row">
+        <button id="restartBtn" class="ghost">নতুন করে</button>
+        <button id="soundBtn" class="ghost">সাউন্ড</button>
+        <button id="homeBtn" class="ghost">প্রথম পাতা</button>
+      </div>
+      <p class="hint">টিপস: পদ্ম ফুলের পাশ দিয়ে গেলে বুস্ট বাড়ে। বাঁকে গতি কমিয়ে নৌকা ঘোরাও।</p>
+    </div>
+  </div>
+
+  <div id="results" class="screen hidden">
+    <div class="card result-card">
+      <div class="medal" id="medal"><span id="resultPlace">১ম</span></div>
+      <p class="eyebrow" id="resultEyebrow">দৌড় শেষ</p>
+      <h2 id="resultTitle">চ্যাম্পিয়ন!</h2>
+      <div class="result-stats">
+        <div><span>স্থান</span><strong id="resultPos">১ম / ৪</strong></div>
+        <div><span>সময়</span><strong id="resultTime">০০:০০.০</strong></div>
+        <div><span>সেরা</span><strong id="resultBest">—</strong></div>
+      </div>
+      <p id="resultNote" class="note">নদী তোমার নাম মনে রাখবে।</p>
+      <button id="againBtn" class="primary">আবার খেলো</button>
+      <button id="menuBtn" class="ghost">প্রথম পাতা</button>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
