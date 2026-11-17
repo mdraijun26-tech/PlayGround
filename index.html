@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f1e4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='27' font-size='27'%3E🌱%3C/text%3E%3C/svg%3E">
+<title>Little Acre — a tiny farm game</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
+:root{--ink:#293b2f;--muted:#758474;--cream:#f7f3e8;--paper:#fffdf6;--line:#e7e2d4;--green:#4c754e;--lime:#d8e8b4;--orange:#e7a54c;--shadow:0 12px 35px #53603d13}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;background-image:radial-gradient(#d8d1bd55 .8px,transparent .8px);background-size:16px 16px}
+button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3px solid #e9aa4d;outline-offset:2px}.app{max-width:1320px;margin:auto;padding:20px 30px 28px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:45px;height:45px;border-radius:15px;background:#dce9be;display:grid;place-items:center;font-size:25px;box-shadow:inset 0 -3px #c5d5a5}.brand-name{font:700 25px 'Fraunces',serif;letter-spacing:-.4px}.brand-sub{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;margin-top:1px}.top-actions{display:flex;align-items:center;gap:10px}.icon-btn{width:40px;height:40px;border:1px solid var(--line);border-radius:13px;background:var(--paper);font-size:18px;box-shadow:0 2px 0 #e7e2d4}.icon-btn:hover{transform:translateY(-1px)}
+.statusbar{display:flex;gap:10px;align-items:center;margin-bottom:14px}.stat{height:45px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:0 14px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 0 #e7e2d4;font-size:13px;font-weight:700;white-space:nowrap}.stat .value{font-size:15px}.stat.day{background:#e8efd9;border-color:#dbe5c8}.stat.money{margin-left:auto}.weather-label{color:var(--muted);font-weight:600}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:stretch}.game-card,.side-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}.game-card{padding:14px}.scene-wrap{width:100%;aspect-ratio:960/600;overflow:hidden;border-radius:15px;background:#a9c783;position:relative}.scene-wrap canvas{display:block;width:100%;height:100%;touch-action:none}.scene-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#fffdf0e8;color:#59664d;font-size:11px;font-weight:700;padding:7px 12px;border-radius:99px;box-shadow:0 2px 8px #34452120;pointer-events:none}
+.bottom-tools{display:flex;align-items:center;gap:9px;padding:13px 3px 1px}.tool{border:1px solid var(--line);background:#fffef9;min-height:43px;padding:8px 13px;border-radius:12px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px;box-shadow:0 2px 0 #e8e3d8;transition:.16s}.tool:hover{transform:translateY(-1px)}.tool.active{background:#e9f0dd;border-color:#cdddb6;box-shadow:inset 0 0 0 1px #cfdeb9}.tool .key{font-size:10px;color:#8b9683;border-left:1px solid var(--line);padding-left:8px;margin-left:1px}.tool-spacer{flex:1}.sleep-btn{background:var(--green);border:0;color:white;box-shadow:0 3px 0 #36563c;padding:10px 15px}.sleep-btn:hover{background:#416943}.sleep-btn .key{color:#d7e5d3;border-color:#ffffff55}
+.sidebar{display:flex;flex-direction:column;gap:14px}.side-card{padding:17px}.card-title{display:flex;justify-content:space-between;align-items:center;font:700 18px 'Fraunces',serif;margin:0 0 13px}.tiny-label{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1.3px}.quest{background:#f4f4e8;border:1px solid #e8e8d7;border-radius:14px;padding:13px;margin-bottom:9px}.quest-head{display:flex;justify-content:space-between;font-size:12px;font-weight:800}.quest-desc{font-size:11px;color:var(--muted);margin:5px 0 9px;line-height:1.45}.progress{height:6px;border-radius:9px;background:#e1e2d2;overflow:hidden}.progress>i{height:100%;display:block;background:#85a767;border-radius:inherit;transition:width .25s}.reward{font-size:10px;color:#8b7848;font-weight:800;margin-top:7px}.seed-list{display:flex;flex-direction:column;gap:8px}.seed-row{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:#fffef9;border-radius:12px;padding:8px 9px;min-height:51px;cursor:pointer;transition:.15s}.seed-row:hover{border-color:#b9cc9d;transform:translateY(-1px)}.seed-row.selected{border-color:#85a767;background:#f0f5e6;box-shadow:inset 0 0 0 1px #b4ca97}.seed-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:#f1eddb;font-size:17px}.seed-name{font-size:12px;font-weight:800}.seed-meta{font-size:10px;color:var(--muted);margin-top:2px}.seed-count{margin-left:auto;font-size:12px;font-weight:800;color:#61734e}.shop-btn{width:100%;margin-top:10px;border:1px dashed #c9c4b4;background:#faf8ef;border-radius:11px;padding:9px;font-size:11px;font-weight:800;color:#62744e}.shop-btn:hover{background:#edf3e3;border-color:#a6bc87}.inventory-note{font-size:10px;color:var(--muted);line-height:1.5;margin:10px 1px 0}.tip{display:flex;gap:9px;align-items:flex-start;font-size:11px;line-height:1.5;color:#687662}.tip span:first-child{font-size:17px}.side-bottom{margin-top:auto}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;background:#293b2f;color:#fffdf6;padding:11px 16px;border-radius:12px;font-size:13px;font-weight:700;box-shadow:0 8px 24px #17221644;pointer-events:none;transition:.22s;z-index:5}.toast.show{opacity:1;transform:translate(-50%,0)}.modal-backdrop{position:fixed;inset:0;background:#20312366;display:none;place-items:center;padding:18px;z-index:10}.modal-backdrop.open{display:grid}.modal{width:min(410px,100%);background:var(--paper);padding:22px;border-radius:20px;box-shadow:0 20px 70px #1e2d1d66}.modal h2{font:700 24px 'Fraunces',serif;margin:0 0 5px}.modal p{font-size:12px;color:var(--muted);margin:0 0 16px;line-height:1.5}.shop-items{display:flex;flex-direction:column;gap:9px}.shop-item{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:13px;padding:10px}.shop-item .details{flex:1}.shop-item strong{font-size:12px}.shop-item small{display:block;color:var(--muted);font-size:10px;margin-top:2px}.buy{border:0;background:#587a4d;color:white;border-radius:9px;padding:8px 11px;font-size:11px;font-weight:800}.modal-close{margin-top:15px;border:1px solid var(--line);background:white;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:800;float:right}.footer-note{text-align:center;color:#8a9484;font-size:10px;margin-top:14px}
+@media(max-width:850px){.app{padding:14px 14px 22px}.layout{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr}.side-bottom{margin-top:0}.game-card{padding:10px}.statusbar{overflow:auto;padding-bottom:3px}.stat.money{margin-left:0}.scene-hint{font-size:9px;bottom:7px}.bottom-tools{flex-wrap:wrap}.tool-spacer{flex:1}.tool{padding:7px 10px}.sidebar>.side-card:first-child{grid-column:span 2}}
+@media(max-width:520px){.app{padding:10px 9px 18px}.topbar{margin-bottom:11px}.brand-mark{height:39px;width:39px;border-radius:13px;font-size:22px}.brand-name{font-size:22px}.brand-sub{font-size:9px}.statusbar{gap:6px;margin-bottom:9px}.stat{height:38px;padding:0 9px;font-size:11px;border-radius:11px;gap:5px}.stat .value{font-size:12px}.game-card{border-radius:17px;padding:7px}.scene-wrap{border-radius:11px}.scene-hint{bottom:4px;padding:5px 8px;font-size:8px}.bottom-tools{gap:6px;padding-top:9px}.tool{min-height:38px;font-size:10px;padding:6px 8px;border-radius:10px}.tool .key{display:none}.sleep-btn{padding:8px 10px}.sidebar{gap:8px}.side-card{padding:12px;border-radius:16px}.card-title{font-size:16px}.seed-row{padding:6px;gap:6px;min-height:44px}.seed-icon{height:27px;width:27px}.seed-name{font-size:10px}.seed-meta{font-size:9px}.seed-count{font-size:10px}.quest{padding:10px}.quest-desc{font-size:10px}.tiny-label{font-size:9px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">🌱</div><div><div class="brand-name">Little Acre</div><div class="brand-sub">a tiny farm game</div></div></div>
+    <div class="top-actions"><button class="icon-btn" id="soundBtn" title="Toggle sound" aria-label="Toggle sound">♪</button><button class="icon-btn" id="resetBtn" title="Start a fresh farm" aria-label="Start a fresh farm">↻</button></div>
+  </header>
+  <div class="statusbar">
+    <div class="stat day"><span>☀️</span><span class="value" id="dayLabel">Day 1</span></div>
+    <div class="stat"><span id="weatherIcon">🌤️</span><span class="weather-label" id="weatherLabel">Sunny</span></div>
+    <div class="stat"><span>🌾</span><span class="value" id="seasonLabel">Spring</span></div>
+    <div class="stat money"><span>🪙</span><span class="value" id="moneyLabel">120</span></div>
+  </div>
+  <main class="layout">
+    <section class="game-card" aria-label="Your farm">
+      <div class="scene-wrap"><canvas id="farm" aria-label="Farm game board"></canvas><div class="scene-hint" id="hint">Choose a seed, then tap a garden plot to plant</div></div>
+      <div class="bottom-tools" role="toolbar" aria-label="Farm tools">
+        <button class="tool active" data-tool="plant"><span>🌱</span> Plant <span class="key">1</span></button>
+        <button class="tool" data-tool="water"><span>💧</span> Water <span class="key">2</span></button>
+        <button class="tool" data-tool="harvest"><span>🧺</span> Harvest <span class="key">3</span></button>
+        <button class="tool" data-tool="clear"><span>🪓</span> Clear <span class="key">4</span></button>
+        <span class="tool-spacer"></span>
+        <button class="tool sleep-btn" id="sleepBtn"><span>🌙</span> End day <span class="key">Space</span></button>
+      </div>
+    </section>
+    <aside class="sidebar">
+      <section class="side-card">
+        <h2 class="card-title">Today's little goals <span>✨</span></h2>
+        <div id="quests"></div>
+      </section>
+      <section class="side-card">
+        <h2 class="card-title">Seed satchel <span class="tiny-label">select a seed</span></h2>
+        <div class="seed-list" id="seedList"></div>
+        <button class="shop-btn" id="shopBtn">＋ Visit the seed shop</button>
+        <p class="inventory-note">Tip: crops need a drink each day. Rain does the watering for you!</p>
+      </section>
+      <section class="side-card side-bottom">
+        <div class="tip"><span>💡</span><span><b>How to play:</b> plant seeds on brown plots, water them, then harvest when they sparkle. Sell your harvest for coins and grow your little farm!</span></div>
+      </section>
+    </aside>
+  </main>
+  <div class="footer-note">A quiet little patch of sunshine · progress saves automatically</div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal-backdrop" id="shopModal" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
+  <div class="modal"><h2 id="shopTitle">The seed shop</h2><p>Fresh packets from the village market. Choose a little something to grow.</p><div class="shop-items" id="shopItems"></div><button class="modal-close" id="closeShop">Done</button></div>
+</div>
+<script>
+const canvas=document.getElementById('farm'),ctx=canvas.getContext('2d');
+const W=960,H=600,COLS=8,ROWS=5,TILE=62,GAP=4,OX=333,OY=221;
+const crops={carrot:{name:'Carrot',emoji:'🥕',seed:8,sell:14,days:2,color:'#ef9c43'},tomato:{name:'Tomato',emoji:'🍅',seed:12,sell:22,days:3,color:'#e97650'},sunflower:{name:'Sunflower',emoji:'🌻',seed:16,sell:32,days:4,color:'#e6b849'},berry:{name:'Strawberry',emoji:'🍓',seed:15,sell:28,days:3,color:'#d96b71'}};
+const weatherTypes=[{name:'Sunny',icon:'🌤️'},{name:'Cloudy',icon:'☁️'},{name:'Rainy',icon:'🌧️'}];
+let game={day:1,money:120,season:0,weather:0,tool:'plant',selected:'carrot',inventory:{carrot:6,tomato:4,sunflower:3,berry:3},plots:[],quests:[],daily:{planted:0,watered:0,harvested:0},sound:true};
+let hover=-1,toastTimer,particles=[];
+function freshPlots(){return Array.from({length:COLS*ROWS},()=>({crop:null,watered:false,ready:false,age:0}))}
+function save(){try{localStorage.setItem('littleAcreSave',JSON.stringify(game))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem('littleAcreSave'));if(s&&s.plots?.length===COLS*ROWS)game={...game,...s,plots:s.plots,daily:s.daily||{planted:0,watered:0,harvested:0}}}catch(e){} if(!game.quests?.length)makeQuests();}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2100)}
+function beep(freq=520){if(!game.sound)return;try{const ac=new(window.AudioContext||window.webkitAudioContext)(),o=ac.createOscillator(),g=ac.createGain();o.frequency.value=freq;o.type='sine';g.gain.setValueAtTime(.055,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.13)}catch(e){}}
+function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);draw()}
+function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke()}}
+function ellipse(x,y,rx,ry,fill){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill()}
+function line(x1,y1,x2,y2,color,width=2){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.stroke()}
+function draw(){if(!ctx)return;ctx.clearRect(0,0,W,H);
+ // meadow
+ ctx.fillStyle='#a8c987';ctx.fillRect(0,0,W,H);
+ for(let y=10;y<H;y+=48)for(let x=(Math.floor(y/48)%2)*24;x<W;x+=48){ctx.fillStyle='#b4d19355';ctx.beginPath();ctx.arc(x+5,y+11,1.3,0,7);ctx.fill();ctx.beginPath();ctx.arc(x+19,y+26,1,0,7);ctx.fill()}
+ // distant hedgerow and hills
+ ctx.fillStyle='#8db77f';ctx.beginPath();ctx.moveTo(0,130);ctx.quadraticCurveTo(100,77,210,119);ctx.quadraticCurveTo(360,66,490,117);ctx.quadraticCurveTo(655,62,790,115);ctx.quadraticCurveTo(880,80,960,107);ctx.lineTo(960,157);ctx.lineTo(0,157);ctx.fill();
+ // background fence
+ for(let x=28;x<935;x+=42){if(x>305&&x<870)continue;line(x,169,x,199,'#a97c4a',5);line(x-4,178,x+4,178,'#cfaa70',2)}line(0,176,302,176,'#c1935b',5);line(875,176,960,176,'#c1935b',5);
+ // path
+ ctx.fillStyle='#d9c99f';ctx.beginPath();ctx.moveTo(0,444);ctx.bezierCurveTo(210,405,235,467,399,451);ctx.bezierCurveTo(622,429,741,467,960,428);ctx.lineTo(960,550);ctx.bezierCurveTo(710,586,573,521,388,547);ctx.bezierCurveTo(209,573,137,518,0,564);ctx.fill();
+ // path pebble marks
+ for(let i=0;i<48;i++){let x=(i*173+31)%960,y=450+((i*71)%112);ellipse(x,y,2+(i%3),1.5,'#bba97e77')}
+ // trees and shrubs at margins
+ drawTree(94,206,.92);drawTree(187,157,.64);drawTree(885,200,.88);drawTree(800,144,.57);drawBush(35,398);drawBush(935,387);drawBush(259,502);
+ // farmhouse
+ drawHouse(105,270);
+ // little flower patch
+ for(const [x,y,c] of [[267,230,'#f3d16f'],[283,249,'#e77e83'],[293,219,'#fff0c4'],[302,261,'#e77e83'],[247,269,'#f3d16f']])drawFlower(x,y,c);
+ // small pond
+ drawPond(870,337);
+ // plot board edging
+ roundRect(OX-9,OY-9,COLS*(TILE+GAP)-GAP+18,ROWS*(TILE+GAP)-GAP+18,13,'#795d3b');
+ roundRect(OX-5,OY-5,COLS*(TILE+GAP)-GAP+10,ROWS*(TILE+GAP)-GAP+10,10,'#c5a36d');
+ for(let i=0;i<game.plots.length;i++){const x=OX+(i%COLS)*(TILE+GAP),y=OY+Math.floor(i/COLS)*(TILE+GAP),p=game.plots[i];
+   roundRect(x,y,TILE,TILE,7,p.crop?'#80593e':'#966a48');
+   roundRect(x+3,y+3,TILE-6,TILE-6,5,p.crop?(p.watered?'#604a38':'#76543d'):(game.weather===2?'#785945':'#805b3e'));
+   // soil ridges
+   for(let z=0;z<3;z++)line(x+8,y+13+z*17,x+TILE-8,y+13+z*17,p.crop?'#8a6447':'#a07751',1);
+   if(p.crop)drawCrop(x+TILE/2,y+TILE/2,p);
+   else if(i===hover&&game.tool==='plant')roundRect(x+5,y+5,TILE-10,TILE-10,5,'#e7d19933','#f8eab9');
+   if(p.crop&&p.watered){ellipse(x+TILE-11,y+10,5,5,'#91d7df');ellipse(x+TILE-12,y+9,1.4,1.4,'#e7ffff')}
+   if(p.crop&&p.ready){ctx.fillStyle='#fff3aa';ctx.font='16px sans-serif';ctx.textAlign='center';ctx.fillText('✦',x+TILE-11,y+14)}
+ }
+ // shed, sign and well
+ drawShed(855,450);drawSign(286,400);
+ // floating sparkles
+ for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/32);ctx.fillStyle=p.color;ctx.font='16px sans-serif';ctx.textAlign='center';ctx.fillText('✦',p.x,p.y);ctx.globalAlpha=1;p.y-=.7;p.life--}particles=particles.filter(p=>p.life>0);
+}
+function drawTree(x,y,s){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ellipse(0,55,31,9,'#496d43');line(0,24,0,63,'#79573d',10);ellipse(-11,5,26,28,'#5e8b52');ellipse(14,-2,25,30,'#709d5b');ellipse(0,-18,24,27,'#82aa65');ellipse(-8,-21,8,7,'#a3c77a77');ctx.restore()}
+function drawBush(x,y){ellipse(x,y,24,13,'#648d52');ellipse(x-13,y-5,11,11,'#75a260');ellipse(x+4,y-8,13,12,'#719a5d');for(let i=0;i<4;i++)ellipse(x-14+i*9,y-2-(i%2)*5,2,2,'#d7c46a')}
+function drawFlower(x,y,c){line(x,y,x,y+11,'#5c8a4e',2);ellipse(x,y,4,4,c);ellipse(x-4,y,3,3,c);ellipse(x+4,y,3,3,c);ellipse(x,y-4,3,3,c);ellipse(x,y+4,3,3,c);ellipse(x,y,2,2,'#e7b44e')}
+function drawHouse(x,y){
+ // shadow and cottage body
+ ellipse(x+94,y+112,114,17,'#55774955');roundRect(x+12,y+36,166,96,7,'#f1dfb8');
+ ctx.fillStyle='#efe4c8';ctx.fillRect(x+23,y+46,145,78);ctx.fillStyle='#d7c299';ctx.fillRect(x+14,y+122,164,9);
+ // roof
+ ctx.fillStyle='#a95e48';ctx.beginPath();ctx.moveTo(x,y+48);ctx.lineTo(x+89,y-10);ctx.lineTo(x+190,y+48);ctx.lineTo(x+180,y+55);ctx.lineTo(x+88,y+0);ctx.lineTo(x+9,y+57);ctx.fill();
+ ctx.fillStyle='#c77757';ctx.beginPath();ctx.moveTo(x+11,y+49);ctx.lineTo(x+88,y-2);ctx.lineTo(x+88,y+44);ctx.lineTo(x+31,y+69);ctx.lineTo(x+14,y+61);ctx.fill();
+ // roof shingles
+ for(let i=0;i<5;i++)line(x+18+i*13,y+48-i*8,x+54+i*13,y+55-i*8,'#da9670',2);
+ // windows
+ for(const wx of [x+37,x+126]){roundRect(wx,y+62,29,30,4,'#a9cfce','#fff6db');line(wx+14,y+64,wx+14,y+91,'#f3ead1',3);line(wx+2,y+77,wx+27,y+77,'#f3ead1',3)}
+ // door and porch
+ roundRect(x+83,y+75,29,56,4,'#8a6547');roundRect(x+88,y+80,19,51,3,'#9b7955');ellipse(x+103,y+106,2,2,'#efca72');
+ line(x+76,y+132,x+120,y+132,'#987450',4);line(x+80,y+132,x+80,y+145,'#987450',3);line(x+116,y+132,x+116,y+145,'#987450',3);
+ // chimney
+ roundRect(x+142,y+4,17,34,2,'#a95e48');line(x+140,y+5,x+161,y+5,'#854b40',4);
+ // entry planter
+ roundRect(x+48,y+112,22,10,3,'#b67a4d');for(let i=0;i<3;i++){line(x+52+i*7,y+112,x+50+i*8,y+103,'#55844e',2);ellipse(x+49+i*8,y+102,4,3,'#80a95e')}
+}
+function drawShed(x,y){ellipse(x+40,y+58,51,9,'#55774955');roundRect(x,y+20,80,40,4,'#d7c397');ctx.fillStyle='#bc7950';ctx.beginPath();ctx.moveTo(x-7,y+23);ctx.lineTo(x+40,y-5);ctx.lineTo(x+87,y+23);ctx.fill();roundRect(x+29,y+31,23,29,3,'#8b6348');line(x+40,y+32,x+40,y+58,'#b7936d',2);line(x+25,y+61,x+56,y+61,'#926d49',3)}
+function drawSign(x,y){line(x+22,y+21,x+22,y+65,'#84603f',5);roundRect(x,y+3,48,29,5,'#9d754a','#704e37');ctx.fillStyle='#fff0c8';ctx.font='bold 11px DM Sans,sans-serif';ctx.textAlign='center';ctx.fillText('FARM',x+24,y+22);line(x+10,y+13,x+34,y+13,'#c89e68',1)}
+function drawPond(x,y){ellipse(x,y+31,65,41,'#719c5d');ellipse(x,y+26,57,35,'#83c2c1');ellipse(x-12,y+16,20,6,'#a5d7cf');ellipse(x+20,y+33,17,5,'#a5d7cf');ellipse(x+41,y+8,4,3,'#eff0b8');ellipse(x+48,y+12,3,2,'#eff0b8');line(x-50,y+30,x-41,y+24,'#dce8ae',2)}
+function drawCrop(cx,cy,p){
+ const info=crops[p.crop],stage=Math.min(1,p.age/info.days),height=13+stage*18,leaf=6+stage*5;
+ // stem
+ line(cx,cy+17,cx,cy+17-height,'#426f42',3);
+ for(let side of [-1,1]){const yy=cy+12-height*.48;ctx.save();ctx.translate(cx,yy);ctx.rotate(side*.38);ellipse(side*leaf*.6,0,leaf,4,'#6caa58');ctx.restore();const yy2=cy+13-height*.78;ctx.save();ctx.translate(cx,yy2);ctx.rotate(-side*.48);ellipse(side*leaf*.52,0,leaf*.8,3.8,'#82b966');ctx.restore()}
+ if(stage>.5){if(p.crop==='sunflower'){ellipse(cx,cy+17-height,9,9,'#e6b849');ellipse(cx,cy+17-height,4,4,'#6d5336');for(let a=0;a<8;a++){let ang=a*Math.PI/4;ellipse(cx+Math.cos(ang)*9,cy+17-height+Math.sin(ang)*9,3,4,'#f4cf67')}}else if(p.crop==='tomato'||p.crop==='berry'){ellipse(cx-5,cy+13-height*.65,5,5,info.color);ellipse(cx+6,cy+16-height*.39,5,5,info.color);ellipse(cx,cy+12-height*.92,4.5,4.5,info.color)}else if(stage>.85){ctx.fillStyle='#e99c45';ctx.beginPath();ctx.moveTo(cx-4,cy+7-height*.72);ctx.lineTo(cx+4,cy+7-height*.72);ctx.lineTo(cx,cy+18-height*.34);ctx.closePath();ctx.fill()}}
+ if(p.ready){ellipse(cx,cy+19,13,5,'#e8c974');}
+}
+function plotAt(px,py){const r=canvas.getBoundingClientRect(),x=(px-r.left)/r.width*W,y=(py-r.top)/r.height*H,col=Math.floor((x-OX)/(TILE+GAP)),row=Math.floor((y-OY)/(TILE+GAP));if(col<0||col>=COLS||row<0||row>=ROWS)return -1;const tx=OX+col*(TILE+GAP),ty=OY+row*(TILE+GAP);return x<=tx+TILE&&y<=ty+TILE?row*COLS+col:-1}
+function addSparkles(i,color='#fff0a1'){const x=OX+(i%COLS)*(TILE+GAP)+TILE/2,y=OY+Math.floor(i/COLS)*(TILE+GAP)+TILE/2;for(let n=0;n<4;n++)particles.push({x:x+(Math.random()-.5)*25,y:y+(Math.random()-.5)*12,life:28+Math.random()*12,color})}
+function doPlot(i){if(i<0)return;const p=game.plots[i];if(game.tool==='plant'){
+ if(p.crop){toast('That plot is already growing something');return}if((game.inventory[game.selected]||0)<1){toast('No '+crops[game.selected].name.toLowerCase()+' seeds left — visit the shop!');return}
+ p.crop=game.selected;p.age=0;p.watered=false;p.ready=false;game.inventory[game.selected]--;game.daily.planted++;addSparkles(i,'#d9efaa');toast(crops[game.selected].name+' seed planted! Give it a drink.');beep(540);
+ }else if(game.tool==='water'){
+ if(!p.crop){toast('Nothing growing here to water');return}if(p.ready){toast('This one is ready to harvest!');return}if(p.watered){toast('Already watered today 💧');return}p.watered=true;game.daily.watered++;addSparkles(i,'#aeeaf1');toast('A refreshing drink for your crop');beep(680);
+ }else if(game.tool==='harvest'){
+ if(!p.crop){toast('Plant something here first');return}if(!p.ready){toast('Not quite ripe yet — keep watering!');return}const crop=crops[p.crop];game.money+=crop.sell;game.daily.harvested++;toast('Lovely '+crop.name.toLowerCase()+'! +'+crop.sell+' coins');addSparkles(i,'#ffe899');p.crop=null;p.age=0;p.ready=false;p.watered=false;beep(820);
+ }else if(game.tool==='clear'){
+ if(!p.crop){toast('This plot is already clear');return}p.crop=null;p.age=0;p.ready=false;p.watered=false;toast('Plot cleared');beep(310)
+ }updateAll();save();draw()}
+function makeQuests(){game.quests=[{type:'planted',title:'Sow a few seeds',desc:'Plant something lovely in your garden.',target:2,reward:12,claimed:false},{type:'watered',title:'A little drink',desc:'Water your growing crops today.',target:3,reward:10,claimed:false},{type:'harvested',title:'Gather the good things',desc:'Harvest a ripe crop from your plots.',target:1,reward:18,claimed:false}]}
+function updateQuests(){for(const q of game.quests){const val=game.daily[q.type]||0;if(val>=q.target&&!q.claimed){q.claimed=true;game.money+=q.reward;toast('Goal complete! +'+q.reward+' bonus coins ✨')}}}
+function renderUI(){
+ document.getElementById('dayLabel').textContent='Day '+game.day;
+ document.getElementById('seasonLabel').textContent=['Spring','Summer','Autumn','Winter'][game.season%4];
+ document.getElementById('weatherIcon').textContent=weatherTypes[game.weather].icon;document.getElementById('weatherLabel').textContent=weatherTypes[game.weather].name;
+ document.getElementById('moneyLabel').textContent=game.money;
+ document.getElementById('seedList').innerHTML=Object.entries(crops).map(([id,c])=>`<div class="seed-row ${game.selected===id?'selected':''}" data-seed="${id}"><div class="seed-icon">${c.emoji}</div><div><div class="seed-name">${c.name}</div><div class="seed-meta">${c.days} days · sells ${c.sell} 🪙</div></div><div class="seed-count">×${game.inventory[id]||0}</div></div>`).join('');
+ document.getElementById('quests').innerHTML=game.quests.map(q=>{const n=Math.min(game.daily[q.type]||0,q.target);return `<div class="quest"><div class="quest-head"><span>${q.claimed?'✓ ':''}${q.title}</span><span>${n}/${q.target}</span></div><div class="quest-desc">${q.desc}</div><div class="progress"><i style="width:${100*n/q.target}%"></i></div><div class="reward">${q.claimed?'BONUS COLLECTED':'🪙 '+q.reward+' bonus coins'}</div></div>`}).join('');
+ document.getElementById('soundBtn').textContent=game.sound?'♪':'♫';document.querySelectorAll('.tool[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===game.tool));
+ document.getElementById('hint').textContent=game.weather===2?'Rain is watering your growing crops today!':game.tool==='plant'?'Choose a seed, then tap a garden plot to plant':game.tool==='water'?'Tap growing crops to give them a drink':game.tool==='harvest'?'Tap a sparkling ripe crop to harvest':'Tap a crop to clear its plot';
+}
+function updateAll(){updateQuests();renderUI()}
+function endDay(){
+ let grew=0;for(const p of game.plots){if(p.crop&&!p.ready){if(p.watered||game.weather===2){p.age++;grew++;if(p.age>=crops[p.crop].days)p.ready=true}p.watered=false}}
+ game.day++;if(game.day%8===1)game.season=(game.season+1)%4;
+ const roll=Math.random();game.weather=roll<.25?2:roll<.58?1:0;
+ if(game.weather===2){for(const p of game.plots)if(p.crop&&!p.ready)p.watered=true}
+ game.daily={planted:0,watered:0,harvested:0};makeQuests();updateAll();save();draw();
+ const ripe=game.plots.filter(p=>p.ready).length;toast(ripe?`Day ${game.day} begins! ${ripe} crop${ripe===1?' is':'s are'} ready to harvest.`:grew?'A new day dawns — your crops grew a little!':'A new day dawns. Tend your little garden!');beep(440)
+}
+function openShop(){const modal=document.getElementById('shopModal');document.getElementById('shopItems').innerHTML=Object.entries(crops).map(([id,c])=>`<div class="shop-item"><div class="seed-icon">${c.emoji}</div><div class="details"><strong>${c.name} seeds</strong><small>${c.days} days to grow · harvest sells for ${c.sell} coins</small></div><button class="buy" data-buy="${id}">Buy 3 · ${c.seed*3}🪙</button></div>`).join('');modal.classList.add('open')}
+function buy(id){const c=crops[id],cost=c.seed*3;if(game.money<cost){toast('Not enough coins just yet');return}game.money-=cost;game.inventory[id]=(game.inventory[id]||0)+3;game.selected=id;game.tool='plant';updateAll();save();openShop();beep(740);toast('Three '+c.name.toLowerCase()+' seed packets added!')}
+function setTool(t){game.tool=t;updateAll();draw();save()}
+load();if(!game.plots?.length)game.plots=freshPlots();renderUI();
+canvas.addEventListener('pointermove',e=>{const i=plotAt(e.clientX,e.clientY);if(i!==hover){hover=i;draw()}});
+canvas.addEventListener('pointerleave',()=>{hover=-1;draw()});canvas.addEventListener('pointerdown',e=>{e.preventDefault();doPlot(plotAt(e.clientX,e.clientY))});
+document.querySelectorAll('.tool[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
+document.getElementById('sleepBtn').addEventListener('click',endDay);
+document.getElementById('seedList').addEventListener('click',e=>{const row=e.target.closest('[data-seed]');if(!row)return;game.selected=row.dataset.seed;game.tool='plant';renderUI();save()});
+document.getElementById('shopBtn').addEventListener('click',openShop);document.getElementById('closeShop').addEventListener('click',()=>document.getElementById('shopModal').classList.remove('open'));
+document.getElementById('shopModal').addEventListener('click',e=>{if(e.target.id==='shopModal')e.currentTarget.classList.remove('open');const b=e.target.closest('[data-buy]');if(b)buy(b.dataset.buy)});
+document.getElementById('soundBtn').addEventListener('click',()=>{game.sound=!game.sound;renderUI();save()});
+document.getElementById('resetBtn').addEventListener('click',()=>{if(confirm('Start over with a fresh little farm? Your saved farm will be replaced.')){localStorage.removeItem('littleAcreSave');game={day:1,money:120,season:0,weather:0,tool:'plant',selected:'carrot',inventory:{carrot:6,tomato:4,sunflower:3,berry:3},plots:freshPlots(),quests:[],daily:{planted:0,watered:0,harvested:0},sound:true};makeQuests();updateAll();save();draw();toast('A fresh new farm, just for you!')}});
+document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();endDay()}if(['1','2','3','4'].includes(e.key))setTool(['plant','water','harvest','clear'][Number(e.key)-1]);if(e.key==='Escape')document.getElementById('shopModal').classList.remove('open')});
+window.addEventListener('resize',resize);resize();setInterval(()=>{if(particles.length)draw()},55);
+</script>
+</body>
+</html>
