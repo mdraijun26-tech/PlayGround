@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#102b32" />
+  <title>River of Tomorrow — Bangladesh, 1971 & 2024</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <div id="game" aria-label="3D game world"></div>
+    <div class="vignette"></div>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="River of Tomorrow home"><span class="brand-mark">R</span><span>RIVER OF<br><b>TOMORROW</b></span></a>
+      <div class="era-switch" aria-label="Choose an era">
+        <button class="era-button active" data-era="1971"><span class="era-dot"></span>1971</button>
+        <button class="era-button" data-era="2024"><span class="era-dot"></span>2024</button>
+      </div>
+      <button class="sound-button" id="sound-toggle" aria-label="Toggle sound" title="Toggle sound">♫ <span>Sound off</span></button>
+    </header>
+    <section class="mission-card" aria-live="polite">
+      <div class="eyebrow"><span class="live-dot"></span><span id="mission-kicker">THE DELTA, 1971</span></div>
+      <h1 id="mission-title">A journey<br>of care.</h1>
+      <p id="mission-copy">Carry essential supplies across the village to the riverside shelter. Every small act helps a community endure.</p>
+      <div class="mission-progress"><div class="progress-label"><span>SUPPLIES DELIVERED</span><b id="progress-count">0 / 3</b></div><div class="progress-track"><i id="progress-fill"></i></div></div>
+      <div class="objective-hint"><span class="hint-key">E</span><span id="objective-hint">Find the glowing supply bundles</span></div>
+    </section>
+    <div class="location-tag"><span class="location-icon">⌖</span><span id="location-name">SONAR GAON · RIVER DELTA</span></div>
+    <div class="crosshair"><span></span></div>
+    <div class="interaction-toast" id="toast" aria-live="polite"></div>
+    <div class="help-pill"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>MOVE</span><i></i><kbd>E</kbd><span>INTERACT</span></div>
+    <div class="mobile-pad" role="group" aria-label="Movement controls">
+      <button data-dir="up" aria-label="Move forward">↑</button><button data-dir="left" aria-label="Move left">←</button><button data-dir="down" aria-label="Move backward">↓</button><button data-dir="right" aria-label="Move right">→</button>
+    </div>
+    <button class="mobile-interact" id="mobile-interact" aria-label="Interact or collect nearby item">ACT<br><b>●</b></button>
+    <div class="right-controls"><button id="restart-button" title="Restart mission" aria-label="Restart mission">↻</button></div>
+    <div class="start-screen" id="start-screen">
+      <div class="start-backdrop"></div>
+      <div class="start-content">
+        <div class="start-eyebrow"><span></span>A TWO-ERA BANGLADESH STORY</div>
+        <div class="start-title">The river<br>remembers<span>.</span></div>
+        <p>Two moments. Two journeys. A country shaped by the courage and care of its people.</p>
+        <div class="start-era-row"><button class="start-era selected" data-start-era="1971"><b>1971</b><span>THE DELTA · AID &amp; SOLIDARITY</span></button><button class="start-era" data-start-era="2024"><b>2024</b><span>DHAKA · VOICE &amp; COMMUNITY</span></button></div>
+        <button class="play-button" id="play-button">BEGIN YOUR JOURNEY <span>↗</span></button>
+        <div class="start-note">A quiet, non-violent story of helping one another.<br>Move with <b>W A S D</b> or touch arrows · Interact with <b>E</b> or ACT</div>
+      </div>
+      <div class="start-foot"><span>FICTION INSPIRED BY REAL MOMENTS</span><span>BANGLADESH · 1971 / 2024</span></div>
+    </div>
+    <div class="end-screen hidden" id="end-screen" aria-hidden="true"><div class="end-card"><div class="end-eyebrow">JOURNEY COMPLETE</div><div class="end-title" id="end-title">Care travels<br>farther.</div><p id="end-copy">The supplies reached the shelter. The strength was always in the people.</p><button class="play-button" id="continue-button">EXPLORE THE OTHER ERA <span>↗</span></button><button class="end-replay" id="replay-button">PLAY THIS JOURNEY AGAIN</button></div></div>
+    <div class="loading-screen" id="loading-screen"><span class="loading-mark">R</span><div>SETTING THE SCENE<span class="loading-dots">...</span></div></div>
+  </main>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
